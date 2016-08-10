@@ -1,3 +1,5 @@
+import student.TestCase;
+
 /**
  * 
  */
@@ -7,7 +9,6 @@
  * @version 2016.08.09
  *
  */
-public class GraphWindow 
+public class SongTest extends TestCase
 {
-    
 }

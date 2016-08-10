@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 /**
  * A class that implements the ADT list by using a chain of
  *  linked nodes that has a head reference.
@@ -466,5 +468,51 @@ public class LinkedList<T> implements LinkedListInterface<T>
         }
         result += "}";
         return result;
+    }
+    
+    /**
+     * 
+     */
+    public void insertionSort(Comparator<T> comp) 
+    {
+        if (numberOfEntries > 1)
+        {
+            Node<T> unsortedPart = firstNode.getNextNode();
+            firstNode.setNextNode(null);
+            
+            while (unsortedPart != null)
+            {
+                Node<T> nodeToInsert = unsortedPart;
+                unsortedPart = unsortedPart.getNextNode();
+                insertInOrder(nodeToInsert, comp);
+            }
+        }
+    }
+    
+    /**
+     * 
+     */
+    public void insertInOrder(Node<T> nodeToInsert, Comparator<T> comp)
+    { 
+        Node<T> currentNode = firstNode;
+        Node<T> previousNode = null;
+        
+        while ((currentNode != null) && 
+                (comp.compare(currentNode.getData(), nodeToInsert.getData()) > 0))
+        {
+            previousNode = currentNode;
+            currentNode = currentNode.getNextNode();
+        }
+        
+        if (previousNode != null)
+        {
+            previousNode.setNextNode(nodeToInsert);
+            nodeToInsert.setNextNode(currentNode);
+        }
+        else 
+        {
+            nodeToInsert.setNextNode(firstNode);
+            firstNode = nodeToInsert;
+        }
     }
 }
