@@ -1,10 +1,3 @@
-
-/**
- * 
- */
-package prj5;
-
-
 import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
@@ -337,12 +330,13 @@ public class GUIGraphWindow implements Observer
         
         
         TextShape read = new TextShape(x, y, "Read", Color.PINK);
-        TextShape art = new TextShape(x, y - 2, "Art", Color.BLUE);
-        TextShape sports = new TextShape(x, y - 4, "Sport", Color.YELLOW);
-        TextShape music = new TextShape(x, y - 6, "Music", Color.GREEN);
-        TextShape song = new TextShape(x, y - 8, "SongTitle", Color.BLACK);
-        TextShape heard = new TextShape(x, y - 10, "Heard", Color.BLACK);
-        TextShape likes = new TextShape(x, y - 12, "Likes", Color.BLACK);
+        TextShape art = new TextShape(x, y - height - 2, "Art", Color.BLUE);
+        TextShape sports = new TextShape(x, y - height - 4, "Sport", Color.YELLOW);
+        TextShape music = new TextShape(x, y - height - 6, "Music", Color.GREEN);
+        TextShape song = new TextShape(x, y - height - 8, "SongTitle", Color.BLACK);
+        TextShape heard = new TextShape(x, y - height - 10, "Heard", Color.BLACK);
+        TextShape likes = new TextShape(x, y - height - 12, "Likes", Color.BLACK);
+        
         window.addShape(read);
         window.addShape(art);
         window.addShape(sports);
