@@ -1,5 +1,6 @@
 package project5;
 
+import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -55,8 +56,32 @@ public class GUIGraphWindow implements Observer
         nextButton.onClick(this, "clickedNext");
         window.addButton(nextButton, WindowSide.NORTH);
         
-        GUIBar bar = new GUIBar(0);
+        GUIBar bar = new GUIBar(2);
         window.addShape(bar);
+        
+        int x = window.getGraphPanelWidth();
+        int y = window.getGraphPanelHeight();
+        
+        northEast = new Shape(x^5/6, y/3, 5, 50, Color.BLACK);
+        southEast = new Shape(x^5/6, y^2/3, 5, 50, Color.BLACK);
+        northWest = new Shape(x/6, y/3, 5, 50, Color.BLACK);
+        southWest = new Shape(x^5/6, y/3, 5, 50, Color.BLACK);
+        
+        north = new Shape(x/3, y/2, 5, 50, Color.BLACK);
+        south = new Shape(x/4, y/2, 5, 50, Color.BLACK);
+        west = new Shape(x/4, y/2, 5, 50, Color.BLACK);
+        east = new Shape(x/4, y/2, 5, 50, Color.BLACK);
+        middle = new Shape(x/2, y/2, 5, 50, Color.BLACK);
+        
+        window.addShape(northEast);
+        window.addShape(southEast);
+        window.addShape(northWest);
+        window.addShape(southWest);
+        window.addShape(north);
+        window.addShape(south);
+        window.addShape(west);
+        window.addShape(east);
+        window.addShape(middle);
     }
 
     /**
@@ -160,8 +185,8 @@ public class GUIGraphWindow implements Observer
         int y = window.getGraphPanelHeight();
         int width = textShape.getWidth();
         int height = textShape.getHeight();
-        textShape.setX((x- width)/2);
-        textShape.setY((y - height)/2); 
+        textShape.setX((x- width)/3);
+        textShape.setY((y - height)/3); 
         
         window.addShape(textShape); 
     }

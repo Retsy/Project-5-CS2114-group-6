@@ -3,7 +3,9 @@ package project5;
 import java.awt.Color;
 
 import CS2114.Shape;
+import CS2114.TextShape;
 import CS2114.Window;
+import methods.Song;
 
 /**
  * The GUIBar is to determine the Bar size and title.
@@ -31,7 +33,7 @@ public class GUIBar extends Shape
      */
     public GUIBar(int size)
     {
-        super(0, 0, size, 2);
+        super(0, 0, size, 3);
         
         northEast = Position.NorthEast;
         southEast = Position.SouthEast;
@@ -49,16 +51,18 @@ public class GUIBar extends Shape
     /**
      * Change the size of the bar with heard.
      */
-    public void changeHeardSize()
+    public int HeardSize()
     {
+        return size;
         //Size changed with heard number for each hobby
     }
     
     /**
      * Change the size of the bar with likes.
      */
-    public void changeLikesSize()
+    public int LikesSize()
     {
+        return size;
       //Size changed with heard number for each hobby
     }
     
@@ -90,5 +94,32 @@ public class GUIBar extends Shape
             default: 
                 return middle;
         }
+    }
+    
+    public void setTitle(Window window)
+    {
+        TextShape textShape = new TextShape(0, 0, Song.class.toString());        
+        window.addShape(textShape); 
+    }
+    
+    public void setColor(Window window)
+    {
+        Shape shape1 = new Shape(0, 0, HeardSize(), Color.PINK);
+        Shape shape2 = new Shape(0, 0, LikesSize(), Color.PINK);
+        Shape shape3 = new Shape(0, 0, HeardSize(), Color.BLUE);
+        Shape shape4 = new Shape(0, 0, LikesSize(), Color.BLUE);
+        Shape shape5 = new Shape(0, 0, HeardSize(), Color.YELLOW);
+        Shape shape6 = new Shape(0, 0, LikesSize(), Color.YELLOW);
+        Shape shape7 = new Shape(0, 0, HeardSize(), Color.GREEN);
+        Shape shape8 = new Shape(0, 0, LikesSize(), Color.GREEN);
+        
+        window.addShape(shape1); 
+        window.addShape(shape2); 
+        window.addShape(shape3); 
+        window.addShape(shape4); 
+        window.addShape(shape5);
+        window.addShape(shape6); 
+        window.addShape(shape7);
+        window.addShape(shape8); 
     }
 }
