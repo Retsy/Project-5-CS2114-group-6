@@ -5,8 +5,10 @@ import java.util.Observer;
 
 import CS2114.Button;
 import CS2114.Shape;
+import CS2114.TextShape;
 import CS2114.Window;
 import CS2114.WindowSide;
+import methods.Song;
 
 public class GUIGraphWindow implements Observer 
 {
@@ -22,7 +24,7 @@ public class GUIGraphWindow implements Observer
     private Shape middle;
     private Window window;
     
-    public GUIGraphWindow(Solution solution)
+    public GUIGraphWindow()
     {        
         window = new Window();
         Button quitButton = new Button("Quit");
@@ -52,14 +54,21 @@ public class GUIGraphWindow implements Observer
         Button nextButton = new Button("next->");
         nextButton.onClick(this, "clickedNext");
         window.addButton(nextButton, WindowSide.NORTH);
+        
+        GUIBar bar = new GUIBar(0);
+        window.addShape(bar);
     }
 
     /**
+     * 
      */
     @Override
     public void update(Observable o, Object arg) 
     {
-        // TODO Auto-generated method stub
+        if (arg.getClass() == Position.class)
+        {
+            Position position = (Position) arg;
+        }
     }
     
     
@@ -144,4 +153,16 @@ public class GUIGraphWindow implements Observer
 
     }
     
+    public void setTitle()
+    {
+        TextShape textShape = new TextShape(0, 0, Song.class.toString());
+        int x = window.getGraphPanelWidth();
+        int y = window.getGraphPanelHeight();
+        int width = textShape.getWidth();
+        int height = textShape.getHeight();
+        textShape.setX((x- width)/2);
+        textShape.setY((y - height)/2); 
+        
+        window.addShape(textShape); 
+    }
 }
