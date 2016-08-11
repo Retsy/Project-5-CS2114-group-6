@@ -17,6 +17,6 @@ public class GenreCompare implements Comparator<Song>
     @Override
     public int compare(Song gen1, Song gen2) 
     {
-        return gen1.genre().compareTo(gen2.genre()); 
+        return gen1.genre().toLowerCase().compareTo(gen2.genre()); 
     }
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 /**
  * @author Tanner Dykes (tdykes95)
