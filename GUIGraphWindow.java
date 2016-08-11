@@ -1,4 +1,9 @@
-package project5;
+
+/**
+ * 
+ */
+package prj5;
+
 
 import java.awt.Color;
 import java.util.Observable;
@@ -9,11 +14,9 @@ import CS2114.Shape;
 import CS2114.TextShape;
 import CS2114.Window;
 import CS2114.WindowSide;
-import methods.Song;
 
 public class GUIGraphWindow implements Observer 
 {
-    private Solution solution;
     private Shape northEast;
     private Shape southEast;
     private Shape northWest;
@@ -24,10 +27,18 @@ public class GUIGraphWindow implements Observer
     private Shape east;
     private Shape middle;
     private Window window;
+    private LinkedList<Song> songs;
+    int firstIndex;
     
-    public GUIGraphWindow()
+    public GUIGraphWindow(LinkedList<Song> songList)
     {        
         window = new Window();
+        window.setTitle("Project 5");
+        window.setSize(1200, 700);
+        firstIndex = 0;
+        
+        songs = songList;
+        
         Button quitButton = new Button("Quit");
         quitButton.onClick(this, "clickedQuit");
         window.addButton(quitButton, WindowSide.SOUTH);
@@ -56,32 +67,12 @@ public class GUIGraphWindow implements Observer
         nextButton.onClick(this, "clickedNext");
         window.addButton(nextButton, WindowSide.NORTH);
         
-        GUIBar bar = new GUIBar(2);
+        displaySongs(songList);
+        displayBlackBars();
+        legend();
+        
+        GUIBar bar = new GUIBar(0);
         window.addShape(bar);
-        
-        int x = window.getGraphPanelWidth();
-        int y = window.getGraphPanelHeight();
-        
-        northEast = new Shape(x^5/6, y/3, 5, 50, Color.BLACK);
-        southEast = new Shape(x^5/6, y^2/3, 5, 50, Color.BLACK);
-        northWest = new Shape(x/6, y/3, 5, 50, Color.BLACK);
-        southWest = new Shape(x^5/6, y/3, 5, 50, Color.BLACK);
-        
-        north = new Shape(x/3, y/2, 5, 50, Color.BLACK);
-        south = new Shape(x/4, y/2, 5, 50, Color.BLACK);
-        west = new Shape(x/4, y/2, 5, 50, Color.BLACK);
-        east = new Shape(x/4, y/2, 5, 50, Color.BLACK);
-        middle = new Shape(x/2, y/2, 5, 50, Color.BLACK);
-        
-        window.addShape(northEast);
-        window.addShape(southEast);
-        window.addShape(northWest);
-        window.addShape(southWest);
-        window.addShape(north);
-        window.addShape(south);
-        window.addShape(west);
-        window.addShape(east);
-        window.addShape(middle);
     }
 
     /**
@@ -90,9 +81,9 @@ public class GUIGraphWindow implements Observer
     @Override
     public void update(Observable o, Object arg) 
     {
-        if (arg.getClass() == Position.class)
+        if (arg.getClass() == PositionENUM.class)
         {
-            Position position = (Position) arg;
+            PositionENUM position = (PositionENUM) arg;
         }
     }
     
@@ -121,7 +112,14 @@ public class GUIGraphWindow implements Observer
      */
     public void clickedPre(Button button) 
     {
-
+        
+        if (songs.get(firstIndex - 9) != null)
+        {
+            window.removeAllShapes();
+            displayBlackBars();
+            firstIndex = firstIndex - 9;
+            displaySongs(songs);
+        }
     }
     
     /**
@@ -130,7 +128,13 @@ public class GUIGraphWindow implements Observer
      */
     public void clickedNext(Button button) 
     {
-
+        if (songs.get(firstIndex + 9) != null)
+        {
+            window.removeAllShapes();
+            displayBlackBars();
+            firstIndex = firstIndex + 9;
+            displaySongs(songs);
+        }
     }
     
     /**
@@ -139,7 +143,11 @@ public class GUIGraphWindow implements Observer
      */
     public void clickedSortByArtistName(Button button) 
     {
-
+        firstIndex = 0;
+        window.removeAllShapes();
+        displayBlackBars();
+        songs.getListByAuthor();
+        displaySongs(songs);
     }
     
     /**
@@ -148,7 +156,11 @@ public class GUIGraphWindow implements Observer
      */
     public void clickedSortBySongTitle(Button button) 
     {
-
+        firstIndex = 0;
+        window.removeAllShapes();
+        displayBlackBars();
+        songs.getListByTitle();
+        displaySongs(songs);
     }
     
     /**
@@ -157,7 +169,11 @@ public class GUIGraphWindow implements Observer
      */
     public void clickedSortByReleaseYear(Button button) 
     {
-
+        firstIndex = 0;
+        window.removeAllShapes();
+        displayBlackBars();
+        songs.getListByDate();
+        displaySongs(songs);
     }
     
     /**
@@ -166,7 +182,11 @@ public class GUIGraphWindow implements Observer
      */
     public void clickedSortByGenre(Button button) 
     {
-
+        firstIndex = 0;
+        window.removeAllShapes();
+        displayBlackBars();
+        songs.getListByGenre();
+        displaySongs(songs);
     }
     
     /**
@@ -178,16 +198,170 @@ public class GUIGraphWindow implements Observer
 
     }
     
-    public void setTitle()
+//    public void setTitle()
+//    {
+//        TextShape textShape = new TextShape(0, 0, Song.class.toString());
+//        int x = window.getGraphPanelWidth();
+//        int y = window.getGraphPanelHeight();
+//        int width = textShape.getWidth();
+//        int height = textShape.getHeight();
+//        textShape.setX((x- width)/2);
+//        textShape.setY((y - height)/2); 
+//        
+//        window.addShape(textShape); 
+//    }
+    
+    public void setLocation(Shape shape, PositionENUM pos)
     {
-        TextShape textShape = new TextShape(0, 0, Song.class.toString());
+        if (pos == PositionENUM.NorthWest)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 4 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 4 - 75);
+        }
+        else if (pos == PositionENUM.North)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 2 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 4 - 75);
+        }
+        else if (pos == PositionENUM.NorthEast)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 4 * 3 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 4 - 75);
+        }
+        
+        else if (pos == PositionENUM.West)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 4 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 2 - 75);
+        }
+        else if (pos == PositionENUM.Middle)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 2 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 2 - 75);
+        }
+        else if (pos == PositionENUM.East)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 4 * 3 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 2 - 75);
+        }
+        
+        else if (pos == PositionENUM.SouthWest)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 4 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 4 * 3 - 75);
+        }
+        else if (pos == PositionENUM.South)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 2 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 4 * 3 - 75);
+        }
+        else if (pos == PositionENUM.SouthEast)
+        {
+            shape.moveTo(this.getWindow().getGraphPanelWidth() / 4 * 3 - shape.getWidth() / 2 - 150,
+                    this.getWindow().getGraphPanelHeight() / 4 * 3 - 75);
+        }
+        
+    }
+    
+    public void displaySongs(LinkedList<Song> list)
+    {
+        northWest = new TextShape(0, 0, list.get(firstIndex).title() + "\n" +" by " + list.get(firstIndex).name());
+        north = new TextShape(0, 0, list.get(firstIndex + 1).title() + "\n" + " by " + list.get(firstIndex + 1).name());
+        northEast = new TextShape(0, 0, list.get(firstIndex + 2).title() + "\n" + " by " + list.get(firstIndex + 2).name());
+        west = new TextShape(0, 0, list.get(firstIndex + 3).title() + "\n" + " by " + list.get(firstIndex + 3).name());
+        middle = new TextShape(0, 0, list.get(firstIndex + 4).title() + "\n" + " by " + list.get(firstIndex + 4).name());
+        east = new TextShape(0, 0, list.get(firstIndex + 5).title() + "\n" + " by " + list.get(firstIndex + 5).name());
+        southWest = new TextShape(0, 0, list.get(firstIndex + 6).title() + "\n" + " by " + list.get(firstIndex + 6).name());
+        south = new TextShape(0, 0, list.get(firstIndex + 7).title() + "\n" + " by " + list.get(firstIndex + 7).name());
+        southEast = new TextShape(0, 0, list.get(firstIndex + 8).title() + "\n" + " by " + list.get(firstIndex + 8).name());
+        
+        window.addShape(northWest);
+        window.addShape(north);
+        window.addShape(northEast);
+        window.addShape(west);
+        window.addShape(middle);
+        window.addShape(east);
+        window.addShape(southWest);
+        window.addShape(south);
+        window.addShape(southEast);
+        
+        
+        
+        
+        setLocation(northWest, PositionENUM.NorthWest);
+        setLocation(north, PositionENUM.North);
+        setLocation(northEast, PositionENUM.NorthEast);
+        setLocation(west, PositionENUM.West);
+        setLocation(middle, PositionENUM.Middle);
+        setLocation(east, PositionENUM.East);
+        setLocation(southWest, PositionENUM.SouthWest);
+        setLocation(south, PositionENUM.South);
+        setLocation(southEast, PositionENUM.SouthEast);
+        
+    }
+    
+    public void displayBlackBars()
+    {
+        Shape bar;
+        for (int i = 1; i < 4; i++)
+        {
+            for (int j = 1; j < 4; j++)
+            {
+                bar = new Shape(0, 0, 8, 60, Color.BLACK);
+                window.addShape(bar);
+                bar.moveTo(this.getWindow().getGraphPanelWidth() / 4 * j - bar.getWidth() / 2 - 150,
+                        this.getWindow().getGraphPanelHeight() / 4 * i - 25);
+            }
+        }
+        
+    }
+    
+    
+    /**
+     * 
+     */
+    public void legend()
+    {
         int x = window.getGraphPanelWidth();
         int y = window.getGraphPanelHeight();
-        int width = textShape.getWidth();
-        int height = textShape.getHeight();
-        textShape.setX((x- width)/3);
-        textShape.setY((y - height)/3); 
         
-        window.addShape(textShape); 
+        Shape blackBox = new Shape(x - 300, y - 300, 202, 242, Color.BLACK);
+        Shape whiteBox = new Shape(x - 298, y - 298, 198, 238, Color.WHITE);
+        
+        
+        
+        int width = whiteBox.getWidth();
+        int height = whiteBox.getHeight();
+        
+        GUIBar bar = new GUIBar(30);
+        
+        
+        TextShape read = new TextShape(x, y, "Read", Color.PINK);
+        TextShape art = new TextShape(x, y - 2, "Art", Color.BLUE);
+        TextShape sports = new TextShape(x, y - 4, "Sport", Color.YELLOW);
+        TextShape music = new TextShape(x, y - 6, "Music", Color.GREEN);
+        TextShape song = new TextShape(x, y - 8, "SongTitle", Color.BLACK);
+        TextShape heard = new TextShape(x, y - 10, "Heard", Color.BLACK);
+        TextShape likes = new TextShape(x, y - 12, "Likes", Color.BLACK);
+        window.addShape(read);
+        window.addShape(art);
+        window.addShape(sports);
+        window.addShape(music);
+        window.addShape(song);
+        window.addShape(heard);
+        window.addShape(likes);
+        
+        read.setBackgroundColor(Color.WHITE);
+        art.setBackgroundColor(Color.WHITE);
+        sports.setBackgroundColor(Color.WHITE);
+        music.setBackgroundColor(Color.WHITE);
+        song.setBackgroundColor(Color.WHITE);
+        heard.setBackgroundColor(Color.WHITE);
+        likes.setBackgroundColor(Color.WHITE);
+        
+        
+        window.addShape(whiteBox);
+        window.addShape(blackBox);
     }
+        
 }
